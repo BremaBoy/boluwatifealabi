@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://boluwatifealabi.vercel.app"),
   title: { default: "Boluwatife Alabi — Software Engineer", template: "%s — Boluwatife Alabi" },
   description: "Web and mobile software engineer building scalable, considered digital products.",
   icons: {
