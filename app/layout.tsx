@@ -4,7 +4,11 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: { default: "Boluwatife Alabi — Software Engineer", template: "%s — Boluwatife Alabi" },
   description: "Web and mobile software engineer building scalable, considered digital products.",
-  icons: { icon: "/favicon.svg", shortcut: "/favicon.svg" },
+  icons: {
+    icon: [{ url: "/icon.png", type: "image/png", sizes: "512x512" }],
+    shortcut: "/icon.png",
+    apple: [{ url: "/icon.png", type: "image/png", sizes: "512x512" }],
+  },
   openGraph: { title: "Boluwatife Alabi — Software Engineer", description: "Web and mobile products, engineered with purpose.", type: "website", images: [{ url: "/og.png", width: 1200, height: 630, alt: "Boluwatife Alabi — Web & Mobile Software Engineer" }] },
   twitter: { card: "summary_large_image", title: "Boluwatife Alabi — Software Engineer", description: "Web and mobile products, engineered with purpose.", images: ["/og.png"] },
 };

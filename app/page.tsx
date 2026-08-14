@@ -15,11 +15,13 @@ export default function Home() {
       <section className="hero section-shell">
         <div className="hero-portrait hero-reveal">
           <div className="portrait-frame"><Image src="/images/boluwatife-hero.jpg" alt="Boluwatife Alabi, software engineer" width={1200} height={1500} priority sizes="(max-width: 700px) 84vw, 35vw" /></div>
+          <span className="portrait-sticker sticker-code">⌘ + create</span>
+          <span className="portrait-sticker sticker-star">✦</span>
           <div className="portrait-note"><span className="status-dot" />Available for ambitious products</div>
           <span className="portrait-index">01 / 04</span>
         </div>
         <div className="hero-copy">
-          <p className="eyebrow hero-line">My name is Boluwatife Alabi.</p>
+          <p className="eyebrow hero-line"><span className="eyebrow-smile">:)</span> My name is Boluwatife Alabi.</p>
           <h1 className="display hero-line"><span>I engineer</span><span>web <em>&amp;</em> mobile</span><span>products that</span><span><i>move</i> with purpose.</span></h1>
           <div className="hero-summary hero-line">
             <p>A software engineer turning complex ideas into fast, scalable and visually considered digital experiences.</p>
@@ -28,6 +30,10 @@ export default function Home() {
         </div>
         <div className="hero-foot"><span>Lagos, Nigeria</span><span>Scroll to discover <b>↓</b></span><span>Web · Mobile · Product</span></div>
       </section>
+
+      <div className="play-strip" aria-label="Areas of expertise">
+        <div><span>Web experiences</span><b>✦</b><span>Mobile products</span><b>✿</b><span>Creative engineering</span><b>●</b><span>Web3 systems</span><b>✦</b><span>Web experiences</span><b>✿</b><span>Mobile products</span><b>●</b></div>
+      </div>
 
       <section className="statement section-shell">
         <p className="section-label" data-reveal>01 — Profile</p>

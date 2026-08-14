@@ -5,6 +5,8 @@ export function ProjectVisual({ project }: { project: Project }) {
   return (
     <div className={`project-visual visual-${project.accent}`} aria-hidden="true">
       <div className="visual-grid" />
+      <span className="visual-orbit"><i /></span>
+      <span className="visual-spark">✦</span>
       <div className="visual-window">
         <div className="visual-window-top"><i /><i /><i /><span>{project.name.toLowerCase()}.product</span></div>
         <div className="visual-window-body">
