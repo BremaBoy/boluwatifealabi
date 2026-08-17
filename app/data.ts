@@ -6,6 +6,7 @@ export type Project = {
   description: string;
   link: string;
   linkLabel: string;
+  preview: string;
   accent: string;
   tags: string[];
 };
@@ -20,6 +21,7 @@ export const projects: Project[] = [
       "A mood-driven social discovery app that turns meeting people into an expressive, real-time experience built around play and genuine connection.",
     link: "https://apps.apple.com/app/balune/id6744545976",
     linkLabel: "View on App Store",
+    preview: "/images/projects/balune.jpg",
     accent: "blue",
     tags: ["Mobile application", "Social product", "Real-time UX"],
   },
@@ -32,6 +34,7 @@ export const projects: Project[] = [
       "An immersive Web3 gaming ecosystem where players can earn, trade, and truly own digital assets through secure decentralized mechanics.",
     link: "https://olosworld.com",
     linkLabel: "Visit platform",
+    preview: "/images/projects/olos-gaming.jpg",
     accent: "acid",
     tags: ["Web3", "Blockchain", "Product engineering"],
   },
@@ -44,6 +47,7 @@ export const projects: Project[] = [
       "A streamlined commerce product that helps businesses present products, manage inventory, and give customers a seamless shopping journey.",
     link: "https://www.jekana.com",
     linkLabel: "Visit website",
+    preview: "/images/projects/jekana.jpg",
     accent: "coral",
     tags: ["Mobile commerce", "API integration", "Product UI"],
   },
@@ -56,6 +60,7 @@ export const projects: Project[] = [
       "A modern Nigerian online store designed around quick product discovery, secure checkout, and a reliable end-to-end shopping experience.",
     link: "https://elshalomstores.com.ng",
     linkLabel: "Visit store",
+    preview: "/images/projects/elshalom-stores.jpg",
     accent: "violet",
     tags: ["E-commerce", "Web development", "Maintenance"],
   },
@@ -68,6 +73,7 @@ export const projects: Project[] = [
       "A clear, approachable financial platform for tracking income, expenses, invoices, and reports without the friction of traditional bookkeeping.",
     link: "https://www.getflowbooks.com",
     linkLabel: "Visit website",
+    preview: "/images/projects/flowbooks.jpg",
     accent: "cyan",
     tags: ["Fintech", "Data UI", "Web application"],
   },
@@ -80,6 +86,7 @@ export const projects: Project[] = [
       "A contemporary digital home for an interior studio, connecting curated décor, practical design guidance, and personalised spatial solutions.",
     link: "https://elshalomdecor.com.ng",
     linkLabel: "Visit website",
+    preview: "/images/projects/elshalom-decor.jpg",
     accent: "sand",
     tags: ["WordPress", "Visual design", "Web experience"],
   },

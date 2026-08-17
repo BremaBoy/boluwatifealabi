@@ -1,18 +1,26 @@
+import Image from "next/image";
 import { ArrowIcon } from "./SiteShell";
 import type { Project } from "../data";
 
 export function ProjectVisual({ project }: { project: Project }) {
+  const previewHost = new URL(project.link).hostname.replace(/^www\./, "");
+
   return (
     <div className={`project-visual visual-${project.accent}`} aria-hidden="true">
       <div className="visual-grid" />
       <span className="visual-orbit"><i /></span>
       <span className="visual-spark">✦</span>
       <div className="visual-window">
-        <div className="visual-window-top"><i /><i /><i /><span>{project.name.toLowerCase()}.product</span></div>
-        <div className="visual-window-body">
-          <span className="visual-mini">{project.type.split(" · ")[1]}</span>
-          <strong>{project.name}</strong>
-          <div className="visual-bars"><i /><i /><i /></div>
+        <div className="visual-window-top"><i /><i /><i /><span>{previewHost}</span></div>
+        <div className="visual-window-preview">
+          <Image
+            className="project-preview-image"
+            src={project.preview}
+            alt=""
+            width={1280}
+            height={720}
+            sizes="(max-width: 700px) 82vw, 38vw"
+          />
         </div>
       </div>
       <span className="visual-code">{project.number}</span>
