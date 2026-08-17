@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
 
 const nav = [
@@ -26,6 +28,7 @@ export function ArrowIcon() {
 }
 
 export function SiteShell({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [menuOpen, setMenuOpen] = useState(false);
   const cursorRef = useRef<HTMLDivElement>(null);
@@ -216,7 +219,8 @@ export function SiteShell({ children }: { children: ReactNode }) {
       <div className="scroll-line" aria-hidden="true" />
       <header className="site-header">
         <PageLink href="/" className="wordmark" label="Boluwatife Alabi, home">
-          <span className="mark" ref={markRef}>
+          <span className={`mark ${pathname === "/" ? "" : "has-static-portrait"}`} ref={markRef}>
+            {pathname !== "/" && <Image className="mark-static-portrait" src="/images/boluwatife-hero.jpg" alt="" width={120} height={120} sizes="44px" />}
             <span className="mark-letter">B!</span>
           </span>
           <span className="wordmark-name">Boluwatife<br />Alabi</span>

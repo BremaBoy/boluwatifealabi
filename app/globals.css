@@ -305,6 +305,9 @@ a:hover .arrow-icon, button:hover .arrow-icon { transform: translate(3px, -3px);
 .wordmark:hover .mark { transform: rotate(7deg) scale(1.06); }
 .mark { position: relative; overflow: hidden; isolation: isolate; }
 .mark-letter { position: relative; z-index: 2; transition: opacity .35s ease, transform .5s cubic-bezier(.2,.8,.2,1); }
+.mark.has-static-portrait { background: color-mix(in srgb, var(--card) 58%, transparent); box-shadow: 3px 3px 0 var(--pink), inset 0 1px 0 rgba(255,255,255,.7); transform: rotate(0); }
+.mark.has-static-portrait .mark-letter { opacity: 0; transform: scale(.35); }
+.mark-static-portrait { position: absolute; z-index: 3; inset: 2px; width: calc(100% - 4px); height: calc(100% - 4px); border-radius: 50%; object-fit: cover; object-position: 50% 28%; filter: saturate(1.04) contrast(1.03); }
 .hero-logo-flying .mark,
 .hero-logo-morphed .mark { background: color-mix(in srgb, var(--card) 58%, transparent); box-shadow: 3px 3px 0 var(--pink), inset 0 1px 0 rgba(255,255,255,.7); transform: rotate(0); }
 .hero-logo-morphed .mark-letter { opacity: 0; transform: scale(.35) rotate(-12deg); }
