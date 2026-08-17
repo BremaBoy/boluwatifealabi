@@ -61,7 +61,7 @@ export default function Home() {
       </section>
 
       <section className="about-tease section-shell" data-reveal>
-        <div className="about-tease-image"><Image src="/images/boluwatife-casual.jpg" alt="Boluwatife Alabi outdoors in Lagos" width={823} height={1097} sizes="(max-width: 700px) 85vw, 38vw" /></div>
+        <div className="about-tease-image"><Image src="/images/boluwatife-formal.jpg" alt="Boluwatife Alabi wearing a suit" width={1200} height={1600} sizes="(max-width: 700px) 85vw, 38vw" /></div>
         <div className="about-tease-copy"><p className="section-label">Beyond the interface</p><h2>Curious by nature.<br /><i>Precise</i> by practice.</h2><p>I care about the thinking underneath the interface: how a system scales, how a person moves through it, and how the smallest interaction changes the whole experience.</p><PageLink href="/about" className="button button-outline">More about me <ArrowIcon /></PageLink></div>
       </section>
     </SiteShell>
