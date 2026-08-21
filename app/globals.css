@@ -218,13 +218,36 @@ a:hover .arrow-icon, button:hover .arrow-icon { transform: translate(3px, -3px);
 
 .cursor-trail { position: fixed; z-index: 2998; inset: 0; width: 100vw; height: 100vh; pointer-events: none; opacity: 0; transition: opacity .25s ease; }
 .cursor-trail.is-visible { opacity: 1; }
-.cursor-ring, .cursor-dot { position: fixed; top: 0; left: 0; z-index: 3000; pointer-events: none; opacity: 0; will-change: transform; }
-.cursor-ring { display: grid; place-items: center; width: 52px; height: 52px; margin: -26px; border: 1px solid var(--fg); border-radius: 50%; transition: width .25s, height .25s, margin .25s, background .25s, border .25s, opacity .18s ease; }
-.cursor-ring.is-visible, .cursor-dot.is-visible { opacity: 1; }
-.cursor-ring span { color: #fff; font: 8px "DM Mono", monospace; opacity: 0; text-transform: uppercase; }
-.cursor-ring.is-active { width: 72px; height: 72px; margin: -36px; border-color: var(--blue); background: var(--blue); mix-blend-mode: normal; }
-.cursor-ring.is-active span { opacity: 1; }
-.cursor-dot { width: 4px; height: 4px; margin: -2px; background: var(--fg); border-radius: 50%; }
+.cursor-rocket, .cursor-dot { position: fixed; top: 0; left: 0; z-index: 3000; pointer-events: none; opacity: 0; will-change: transform; }
+.cursor-rocket {
+  --rocket-body: #201a36;
+  --rocket-detail: #fff8e9;
+  --rocket-window: #ffdc55;
+  --rocket-flame: #ff6e58;
+  width: 46px;
+  height: 34px;
+  margin: -17px 0 0 -23px;
+  transition: opacity .16s ease;
+}
+html[data-theme="dark"] .cursor-rocket { --rocket-body: #fff7e7; --rocket-detail: #211b31; --rocket-window: #8276ff; --rocket-flame: #ffdf62; }
+.cursor-rocket.is-visible, .cursor-dot.is-visible { opacity: 1; }
+.rocket-shell { position: absolute; top: 8px; left: 8px; width: 31px; height: 18px; background: var(--rocket-body); border: 2px solid var(--rocket-detail); border-radius: 65% 90% 90% 65%; box-shadow: 0 4px 12px rgba(32,26,54,.2); transition: transform .22s cubic-bezier(.2,.8,.2,1), filter .22s ease; }
+.rocket-window { position: absolute; top: 3px; right: 7px; width: 7px; height: 7px; background: var(--rocket-window); border: 1.5px solid var(--rocket-detail); border-radius: 50%; }
+.rocket-fin { position: absolute; left: 5px; width: 10px; height: 7px; background: var(--rocket-body); }
+.rocket-fin-top { top: -6px; clip-path: polygon(0 100%, 100% 100%, 36% 0); }
+.rocket-fin-bottom { bottom: -6px; clip-path: polygon(0 0, 100% 0, 36% 100%); }
+.rocket-flame { position: absolute; top: 4px; left: -10px; width: 12px; height: 7px; background: linear-gradient(90deg, transparent, var(--rocket-flame) 42%, var(--rocket-window)); border-radius: 70% 15% 15% 70%; clip-path: polygon(0 50%, 38% 3%, 100% 18%, 100% 82%, 38% 97%); animation: rocket-flame-flicker .14s ease-in-out infinite alternate; transform-origin: right center; }
+.rocket-label { position: absolute; top: 28px; left: 50%; padding: 3px 6px; color: var(--rocket-detail); background: var(--rocket-body); border-radius: 999px; font: 7px "DM Mono", monospace; letter-spacing: .08em; opacity: 0; text-transform: uppercase; transform: translate(-50%, -4px); transition: opacity .18s ease, transform .18s ease; }
+.cursor-rocket.is-active .rocket-shell { filter: drop-shadow(0 0 8px color-mix(in srgb, var(--rocket-window) 82%, transparent)); transform: scale(1.16); }
+.cursor-rocket.is-active .rocket-label { opacity: 1; transform: translate(-50%, 0); }
+.cursor-rocket.is-exploding .rocket-shell { animation: rocket-explode .62s cubic-bezier(.2,.8,.2,1); }
+.cursor-rocket.is-exploding .rocket-label { opacity: 0; }
+.cursor-rocket.is-exploding::after { position: absolute; top: 50%; left: 50%; width: 12px; height: 12px; border: 3px solid var(--rocket-flame); border-radius: 50%; content: ""; animation: rocket-shockwave .58s ease-out forwards; transform: translate(-50%, -50%); }
+.cursor-dot { width: 4px; height: 4px; margin: -2px; background: var(--fg); border-radius: 50%; transition: opacity .12s ease; }
+.cursor-dot.is-exploding { opacity: 0; }
+@keyframes rocket-flame-flicker { from { transform: scaleX(.72); } to { transform: scaleX(1.15); } }
+@keyframes rocket-explode { 0% { opacity: 1; transform: scale(1); } 18% { opacity: 1; transform: scale(.72) rotate(-8deg); } 36% { opacity: 0; transform: scale(1.9) rotate(24deg); } 72% { opacity: 0; transform: scale(.25) rotate(-18deg); } 100% { opacity: 1; transform: scale(1) rotate(0); } }
+@keyframes rocket-shockwave { 0% { opacity: 1; transform: translate(-50%, -50%) scale(.3); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(4.8); } }
 
 @media (max-width: 950px) {
   .section-shell, .site-header { width: min(100% - 38px, 1480px); }
@@ -242,7 +265,7 @@ a:hover .arrow-icon, button:hover .arrow-icon { transform: translate(3px, -3px);
   .hero-summary { grid-template-columns: 1fr; margin-left: 0; }
   .contact-hero { grid-template-columns: 1fr; }
   .contact-meta { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
-  .cursor-trail, .cursor-ring, .cursor-dot { display: none; }
+  .cursor-trail, .cursor-rocket, .cursor-dot { display: none; }
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -296,7 +319,7 @@ a:hover .arrow-icon, button:hover .arrow-icon { transform: translate(3px, -3px);
   .cursor-trail { display: none; }
   *, *::before, *::after { scroll-behavior: auto!important; animation-duration: .01ms!important; animation-iteration-count: 1!important; transition-duration: .01ms!important; }
   [data-reveal], .hero-line, .hero-portrait { opacity: 1; transform: none; }
-  .cursor-ring, .cursor-dot { display: none; }
+  .cursor-rocket, .cursor-dot { display: none; }
 }
 
 /* Playful product-studio theme */
@@ -466,8 +489,6 @@ a:hover .arrow-icon, button:hover .arrow-icon { transform: translate(3px, -3px);
 .contact-form label > span { color: #62596a; }
 .contact-form input, .contact-form textarea { color: #201a36; }
 
-.cursor-ring { border: 2px solid var(--fg); background: color-mix(in srgb, var(--yellow) 25%, transparent); }
-.cursor-ring.is-active { border-color: var(--line); background: var(--pink); box-shadow: 4px 4px 0 var(--line); }
 .cursor-dot { background: var(--blue); }
 
 @media (max-width: 950px) {
@@ -587,36 +608,6 @@ a:hover .arrow-icon, button:hover .arrow-icon { transform: translate(3px, -3px);
 
 .button-outline { background: color-mix(in srgb, var(--card) 44%, transparent); -webkit-backdrop-filter: blur(12px) saturate(150%); backdrop-filter: blur(12px) saturate(150%); }
 
-.cursor-ring {
-  overflow: hidden;
-  border: 1px solid rgba(255,255,255,.72);
-  background: rgba(255,255,255,.10);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.78), inset 0 -1px 0 rgba(255,255,255,.16), 0 8px 28px rgba(32,26,54,.18), 0 0 0 1px color-mix(in srgb, var(--fg) 28%, transparent);
-  -webkit-backdrop-filter: blur(11px) saturate(185%);
-  backdrop-filter: blur(11px) saturate(185%);
-}
-.cursor-ring::before {
-  position: absolute;
-  top: 5px;
-  left: 9px;
-  width: 44%;
-  height: 22%;
-  background: linear-gradient(120deg, rgba(255,255,255,.7), rgba(255,255,255,.05));
-  border-radius: 999px;
-  transform: rotate(-22deg);
-  content: "";
-}
-.cursor-ring span { position: relative; z-index: 2; color: var(--fg); font-weight: 500; text-shadow: 0 1px 8px var(--bg); }
-.cursor-ring.is-active {
-  width: 78px;
-  height: 78px;
-  margin: -39px;
-  border-color: rgba(255,255,255,.82);
-  background: color-mix(in srgb, var(--pink) 22%, transparent);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(255,255,255,.18), 0 10px 32px rgba(32,26,54,.22), 0 0 0 2px color-mix(in srgb, var(--pink) 42%, transparent);
-  -webkit-backdrop-filter: blur(15px) saturate(200%);
-  backdrop-filter: blur(15px) saturate(200%);
-}
 .cursor-dot { width: 6px; height: 6px; margin: -3px; border: 1px solid rgba(255,255,255,.8); background: color-mix(in srgb, var(--blue) 62%, transparent); box-shadow: 0 2px 8px rgba(32,26,54,.3); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
 
 html[data-theme="dark"] .site-header,
@@ -630,5 +621,5 @@ html[data-theme="dark"] .contact-meta > div { background: rgba(23,19,35,.72); bo
 html[data-theme="dark"] .contact-meta span { color: rgba(255,255,255,.7); }
 
 @media (max-width: 950px) {
-  .cursor-ring, .cursor-dot { -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .cursor-rocket, .cursor-dot { -webkit-backdrop-filter: none; backdrop-filter: none; }
 }
