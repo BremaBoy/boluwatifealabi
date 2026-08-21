@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
+import { CosmicCursor } from "./CosmicCursor";
 
 const nav = [
   { href: "/", label: "Home" },
@@ -31,8 +32,6 @@ export function SiteShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [menuOpen, setMenuOpen] = useState(false);
-  const cursorRef = useRef<HTMLDivElement>(null);
-  const cursorDotRef = useRef<HTMLDivElement>(null);
   const markRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
@@ -169,15 +168,6 @@ export function SiteShell({ children }: { children: ReactNode }) {
     }, { threshold: 0.12, rootMargin: "0px 0px -6%" });
     document.querySelectorAll("[data-reveal]").forEach((element) => reveal.observe(element));
 
-    const onPointerMove = (event: PointerEvent) => {
-      if (!cursorRef.current || !cursorDotRef.current) return;
-      cursorRef.current.style.transform = `translate3d(${event.clientX}px, ${event.clientY}px, 0)`;
-      cursorDotRef.current.style.transform = `translate3d(${event.clientX}px, ${event.clientY}px, 0)`;
-    };
-    const onPointerOver = (event: PointerEvent) => {
-      const target = event.target as HTMLElement;
-      cursorRef.current?.classList.toggle("is-active", Boolean(target.closest("a, button, input, textarea, [data-cursor]")));
-    };
     const onScroll = () => {
       const total = document.documentElement.scrollHeight - window.innerHeight;
       document.documentElement.style.setProperty("--scroll", total > 0 ? `${(window.scrollY / total) * 100}%` : "0%");
@@ -186,8 +176,6 @@ export function SiteShell({ children }: { children: ReactNode }) {
     const onResize = () => {
       if (!morphFrame) morphFrame = window.requestAnimationFrame(updateHeroMorph);
     };
-    window.addEventListener("pointermove", onPointerMove, { passive: true });
-    document.addEventListener("pointerover", onPointerOver, { passive: true });
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize, { passive: true });
     onScroll();
@@ -196,8 +184,6 @@ export function SiteShell({ children }: { children: ReactNode }) {
       window.cancelAnimationFrame(morphFrame);
       settleInHero();
       reveal.disconnect();
-      window.removeEventListener("pointermove", onPointerMove);
-      document.removeEventListener("pointerover", onPointerOver);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
     };
@@ -214,8 +200,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
     <>
       <div className="page-wipe" aria-hidden="true" />
       <div className="ambient-shapes" aria-hidden="true"><i /><i /><i /><i /></div>
-      <div className="cursor-ring" ref={cursorRef} aria-hidden="true"><span>Open</span></div>
-      <div className="cursor-dot" ref={cursorDotRef} aria-hidden="true" />
+      <CosmicCursor />
       <div className="scroll-line" aria-hidden="true" />
       <header className="site-header">
         <PageLink href="/" className="wordmark" label="Boluwatife Alabi, home">

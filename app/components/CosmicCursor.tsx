@@ -1,0 +1,212 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+
+type TrailParticle = {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  age: number;
+  life: number;
+  size: number;
+  color: string;
+  phase: number;
+};
+
+const trailColors = ["#5a44ff", "#ff5d9e", "#47d7ad", "#ffd64d", "#ffffff"];
+
+export function CosmicCursor() {
+  const trailRef = useRef<HTMLCanvasElement>(null);
+  const ringRef = useRef<HTMLDivElement>(null);
+  const dotRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const trail = trailRef.current;
+    const ring = ringRef.current;
+    const dot = dotRef.current;
+    if (!trail || !ring || !dot) return;
+
+    const context = trail.getContext("2d");
+    const root = document.documentElement;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    if (!context || !finePointer) return;
+
+    const particles: TrailParticle[] = [];
+    const pointer = { x: -120, y: -120, previousX: -120, previousY: -120, ready: false };
+    const follower = { x: -120, y: -120, angle: 0, stretch: 1 };
+    let animationFrame = 0;
+    let lastFrameTime = performance.now();
+    let deviceScale = Math.min(window.devicePixelRatio || 1, 2);
+
+    const resize = () => {
+      deviceScale = Math.min(window.devicePixelRatio || 1, 2);
+      trail.width = Math.round(window.innerWidth * deviceScale);
+      trail.height = Math.round(window.innerHeight * deviceScale);
+      context.setTransform(deviceScale, 0, 0, deviceScale, 0, 0);
+    };
+
+    const addParticles = (x: number, y: number, previousX: number, previousY: number) => {
+      if (reduceMotion) return;
+      const dx = x - previousX;
+      const dy = y - previousY;
+      const distance = Math.hypot(dx, dy);
+      if (distance < 2) return;
+
+      const normalX = -dy / distance;
+      const normalY = dx / distance;
+      const directionX = dx / distance;
+      const directionY = dy / distance;
+      const count = Math.min(32, Math.max(2, Math.ceil(distance / 9)));
+
+      for (let index = 0; index < count; index += 1) {
+        const progress = (index + Math.random()) / count;
+        const spread = (Math.random() - 0.5) * Math.min(28, 7 + distance * 0.08);
+        const drift = (Math.random() - 0.5) * 0.75;
+        particles.push({
+          x: previousX + dx * progress + normalX * spread,
+          y: previousY + dy * progress + normalY * spread,
+          vx: normalX * drift + directionX * (0.12 + Math.random() * 0.35),
+          vy: normalY * drift + directionY * (0.12 + Math.random() * 0.35),
+          age: 0,
+          life: 620 + Math.random() * 860,
+          size: 0.7 + Math.random() * 2.25,
+          color: trailColors[Math.floor(Math.random() * trailColors.length)],
+          phase: Math.random() * Math.PI * 2,
+        });
+      }
+
+      if (particles.length > 360) particles.splice(0, particles.length - 360);
+    };
+
+    const draw = (time: number) => {
+      const delta = Math.min(34, time - lastFrameTime || 16.67);
+      lastFrameTime = time;
+
+      if (pointer.ready) {
+        if (reduceMotion) {
+          follower.x = pointer.x;
+          follower.y = pointer.y;
+          follower.angle = 0;
+          follower.stretch = 1;
+        } else {
+          const beforeX = follower.x;
+          const beforeY = follower.y;
+          const easing = 1 - Math.pow(0.8, delta / 16.67);
+          follower.x += (pointer.x - follower.x) * easing;
+          follower.y += (pointer.y - follower.y) * easing;
+          const velocityX = follower.x - beforeX;
+          const velocityY = follower.y - beforeY;
+          const speed = Math.hypot(velocityX, velocityY);
+          if (speed > 0.08) follower.angle = Math.atan2(velocityY, velocityX) * 180 / Math.PI;
+          follower.stretch += (Math.min(1.24, 1 + speed * 0.018) - follower.stretch) * 0.22;
+        }
+
+        ring.style.transform = `translate3d(${follower.x}px, ${follower.y}px, 0) rotate(${follower.angle}deg) scale(${follower.stretch}, ${2 - follower.stretch})`;
+        dot.style.transform = `translate3d(${pointer.x}px, ${pointer.y}px, 0)`;
+      }
+
+      context.clearRect(0, 0, trail.width / deviceScale, trail.height / deviceScale);
+      context.globalCompositeOperation = root.dataset.theme === "dark" ? "lighter" : "source-over";
+
+      for (let index = particles.length - 1; index >= 0; index -= 1) {
+        const particle = particles[index];
+        particle.age += delta;
+        if (particle.age >= particle.life) {
+          particles.splice(index, 1);
+          continue;
+        }
+
+        const progress = particle.age / particle.life;
+        const fadeIn = Math.min(1, progress * 8);
+        const alpha = fadeIn * Math.pow(1 - progress, 1.7);
+        particle.x += particle.vx * (delta / 16.67);
+        particle.y += particle.vy * (delta / 16.67) - 0.035 * (delta / 16.67);
+        particle.vx *= 0.988;
+        particle.vy *= 0.988;
+        const pulse = 0.78 + Math.sin(particle.phase + progress * 10) * 0.22;
+        const radius = particle.size * pulse;
+
+        context.save();
+        context.globalAlpha = alpha * (root.dataset.theme === "dark" ? 0.92 : 0.74);
+        context.fillStyle = particle.color;
+        context.shadowColor = particle.color;
+        context.shadowBlur = radius > 1.8 ? 9 : 4;
+        context.beginPath();
+        context.arc(particle.x, particle.y, Math.max(0.45, radius), 0, Math.PI * 2);
+        context.fill();
+        if (radius > 2.15) {
+          context.lineWidth = 0.7;
+          context.strokeStyle = particle.color;
+          context.beginPath();
+          context.moveTo(particle.x - radius * 2.4, particle.y);
+          context.lineTo(particle.x + radius * 2.4, particle.y);
+          context.moveTo(particle.x, particle.y - radius * 2.4);
+          context.lineTo(particle.x, particle.y + radius * 2.4);
+          context.stroke();
+        }
+        context.restore();
+      }
+
+      animationFrame = window.requestAnimationFrame(draw);
+    };
+
+    const show = () => {
+      if (!pointer.ready) return;
+      ring.classList.add("is-visible");
+      dot.classList.add("is-visible");
+    };
+    const hide = () => {
+      ring.classList.remove("is-visible");
+      dot.classList.remove("is-visible");
+    };
+    const onPointerMove = (event: PointerEvent) => {
+      if (!pointer.ready) {
+        pointer.previousX = event.clientX;
+        pointer.previousY = event.clientY;
+        follower.x = event.clientX;
+        follower.y = event.clientY;
+        pointer.ready = true;
+        trail.classList.add("is-visible");
+        show();
+      }
+      addParticles(event.clientX, event.clientY, pointer.previousX, pointer.previousY);
+      pointer.x = event.clientX;
+      pointer.y = event.clientY;
+      pointer.previousX = event.clientX;
+      pointer.previousY = event.clientY;
+    };
+    const onPointerOver = (event: PointerEvent) => {
+      const target = event.target as HTMLElement;
+      ring.classList.toggle("is-active", Boolean(target.closest("a, button, input, textarea, select, [data-cursor]")));
+    };
+
+    resize();
+    animationFrame = window.requestAnimationFrame(draw);
+    window.addEventListener("pointermove", onPointerMove, { passive: true });
+    document.addEventListener("pointerover", onPointerOver, { passive: true });
+    document.documentElement.addEventListener("pointerleave", hide, { passive: true });
+    document.documentElement.addEventListener("pointerenter", show, { passive: true });
+    window.addEventListener("blur", hide);
+    window.addEventListener("resize", resize, { passive: true });
+
+    return () => {
+      window.cancelAnimationFrame(animationFrame);
+      window.removeEventListener("pointermove", onPointerMove);
+      document.removeEventListener("pointerover", onPointerOver);
+      document.documentElement.removeEventListener("pointerleave", hide);
+      document.documentElement.removeEventListener("pointerenter", show);
+      window.removeEventListener("blur", hide);
+      window.removeEventListener("resize", resize);
+    };
+  }, []);
+
+  return (
+    <>
+      <canvas className="cursor-trail" ref={trailRef} aria-hidden="true" />
+      <div className="cursor-ring" ref={ringRef} aria-hidden="true"><span>Open</span></div>
+      <div className="cursor-dot" ref={dotRef} aria-hidden="true" />
+    </>
+  );
+}

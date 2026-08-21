@@ -216,8 +216,11 @@ a:hover .arrow-icon, button:hover .arrow-icon { transform: translate(3px, -3px);
 .contact-form input::placeholder, .contact-form textarea::placeholder { color: var(--muted); opacity: .6; }
 .form-submit { margin: 45px 0 0 auto; border: 0; }
 
-.cursor-ring, .cursor-dot { position: fixed; top: 0; left: 0; z-index: 3000; pointer-events: none; will-change: transform; }
-.cursor-ring { display: grid; place-items: center; width: 52px; height: 52px; margin: -26px; border: 1px solid var(--fg); border-radius: 50%; transition: width .25s, height .25s, margin .25s, background .25s, border .25s; }
+.cursor-trail { position: fixed; z-index: 2998; inset: 0; width: 100vw; height: 100vh; pointer-events: none; opacity: 0; transition: opacity .25s ease; }
+.cursor-trail.is-visible { opacity: 1; }
+.cursor-ring, .cursor-dot { position: fixed; top: 0; left: 0; z-index: 3000; pointer-events: none; opacity: 0; will-change: transform; }
+.cursor-ring { display: grid; place-items: center; width: 52px; height: 52px; margin: -26px; border: 1px solid var(--fg); border-radius: 50%; transition: width .25s, height .25s, margin .25s, background .25s, border .25s, opacity .18s ease; }
+.cursor-ring.is-visible, .cursor-dot.is-visible { opacity: 1; }
 .cursor-ring span { color: #fff; font: 8px "DM Mono", monospace; opacity: 0; text-transform: uppercase; }
 .cursor-ring.is-active { width: 72px; height: 72px; margin: -36px; border-color: var(--blue); background: var(--blue); mix-blend-mode: normal; }
 .cursor-ring.is-active span { opacity: 1; }
@@ -239,7 +242,11 @@ a:hover .arrow-icon, button:hover .arrow-icon { transform: translate(3px, -3px);
   .hero-summary { grid-template-columns: 1fr; margin-left: 0; }
   .contact-hero { grid-template-columns: 1fr; }
   .contact-meta { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
-  .cursor-ring, .cursor-dot { display: none; }
+  .cursor-trail, .cursor-ring, .cursor-dot { display: none; }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html, body, a, button, input, textarea, select, [data-cursor] { cursor: none !important; }
 }
 
 @media (max-width: 700px) {
@@ -286,6 +293,7 @@ a:hover .arrow-icon, button:hover .arrow-icon { transform: translate(3px, -3px);
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .cursor-trail { display: none; }
   *, *::before, *::after { scroll-behavior: auto!important; animation-duration: .01ms!important; animation-iteration-count: 1!important; transition-duration: .01ms!important; }
   [data-reveal], .hero-line, .hero-portrait { opacity: 1; transform: none; }
   .cursor-ring, .cursor-dot { display: none; }
