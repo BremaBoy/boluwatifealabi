@@ -20,13 +20,11 @@ const trailColors = ["#5a44ff", "#ff5d9e", "#47d7ad", "#ffd64d", "#ffffff"];
 export function CosmicCursor() {
   const trailRef = useRef<HTMLCanvasElement>(null);
   const rocketRef = useRef<HTMLDivElement>(null);
-  const dotRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const trail = trailRef.current;
     const rocket = rocketRef.current;
-    const dot = dotRef.current;
-    if (!trail || !rocket || !dot) return;
+    if (!trail || !rocket) return;
 
     const context = trail.getContext("2d");
     const root = document.documentElement;
@@ -107,14 +105,11 @@ export function CosmicCursor() {
       }
 
       rocket.classList.remove("is-exploding");
-      dot.classList.remove("is-exploding");
       void rocket.offsetWidth;
       rocket.classList.add("is-exploding");
-      dot.classList.add("is-exploding");
       window.clearTimeout(explosionTimer);
       explosionTimer = window.setTimeout(() => {
         rocket.classList.remove("is-exploding");
-        dot.classList.remove("is-exploding");
       }, 620);
     };
 
@@ -142,7 +137,6 @@ export function CosmicCursor() {
         }
 
         rocket.style.transform = `translate3d(${follower.x}px, ${follower.y}px, 0) rotate(${follower.angle}deg) scale(${follower.stretch}, ${2 - follower.stretch})`;
-        dot.style.transform = `translate3d(${pointer.x}px, ${pointer.y}px, 0)`;
       }
 
       context.clearRect(0, 0, trail.width / deviceScale, trail.height / deviceScale);
@@ -194,11 +188,9 @@ export function CosmicCursor() {
     const show = () => {
       if (!pointer.ready) return;
       rocket.classList.add("is-visible");
-      dot.classList.add("is-visible");
     };
     const hide = () => {
       rocket.classList.remove("is-visible");
-      dot.classList.remove("is-visible");
     };
     const onPointerMove = (event: PointerEvent) => {
       if (!pointer.ready) {
@@ -261,14 +253,11 @@ export function CosmicCursor() {
       <canvas className="cursor-trail" ref={trailRef} aria-hidden="true" />
       <div className="cursor-rocket" ref={rocketRef} aria-hidden="true">
         <span className="rocket-shell">
-          <i className="rocket-window" />
           <i className="rocket-fin rocket-fin-top" />
           <i className="rocket-fin rocket-fin-bottom" />
           <i className="rocket-flame" />
         </span>
-        <span className="rocket-label">Go!</span>
       </div>
-      <div className="cursor-dot" ref={dotRef} aria-hidden="true" />
     </>
   );
 }
