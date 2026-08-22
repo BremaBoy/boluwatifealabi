@@ -224,21 +224,21 @@ a:hover .arrow-icon, button:hover .arrow-icon { transform: translate(3px, -3px);
   --rocket-detail: #fff8e9;
   --rocket-flame-tip: #ffdc55;
   --rocket-flame: #ff6e58;
-  width: 54px;
-  height: 40px;
-  margin: -20px 0 0 -27px;
-  filter: drop-shadow(0 4px 4px rgba(32,26,54,.28));
+  width: 36px;
+  height: 28px;
+  margin: -14px 0 0 -18px;
+  filter: drop-shadow(0 2px 2px rgba(32,26,54,.28));
   transition: opacity .16s ease;
 }
 html[data-theme="dark"] .cursor-rocket { --rocket-body: #fff7e7; --rocket-detail: #211b31; --rocket-flame-tip: #ff86b3; --rocket-flame: #ffdf62; }
 .cursor-rocket.is-visible { opacity: 1; }
-.rocket-shell { position: absolute; top: 8px; left: 7px; width: 40px; height: 24px; background: var(--rocket-body); border: 2.5px solid var(--rocket-detail); border-radius: 62% 92% 92% 62%; box-shadow: 0 0 0 1px color-mix(in srgb, var(--rocket-body) 72%, transparent); transition: transform .22s cubic-bezier(.2,.8,.2,1), filter .22s ease; }
-.rocket-shell::after { position: absolute; top: 3px; right: 9px; width: 3px; height: 13px; background: var(--rocket-detail); border-radius: 999px; content: ""; opacity: .82; }
-.rocket-fin { position: absolute; left: 6px; width: 13px; height: 9px; background: var(--rocket-body); }
-.rocket-fin-top { top: -8px; clip-path: polygon(0 100%, 100% 100%, 34% 0); }
-.rocket-fin-bottom { bottom: -8px; clip-path: polygon(0 0, 100% 0, 34% 100%); }
-.rocket-flame { position: absolute; top: 6px; left: -13px; width: 15px; height: 9px; background: linear-gradient(90deg, transparent, var(--rocket-flame) 42%, var(--rocket-flame-tip)); border-radius: 70% 15% 15% 70%; clip-path: polygon(0 50%, 38% 3%, 100% 18%, 100% 82%, 38% 97%); animation: rocket-flame-flicker .14s ease-in-out infinite alternate; transform-origin: right center; }
-.cursor-rocket.is-active .rocket-shell { filter: drop-shadow(0 0 8px color-mix(in srgb, var(--rocket-flame) 82%, transparent)); transform: scale(1.12); }
+.rocket-shell { position: absolute; top: 6px; left: 7px; width: 25px; height: 15px; background: var(--rocket-body); border: 1.5px solid var(--rocket-detail); border-radius: 62% 92% 92% 62%; box-shadow: 0 0 0 1px color-mix(in srgb, var(--rocket-body) 72%, transparent); transition: transform .22s cubic-bezier(.2,.8,.2,1), filter .22s ease; }
+.rocket-shell::after { position: absolute; top: 2px; right: 6px; width: 2px; height: 8px; background: var(--rocket-detail); border-radius: 999px; content: ""; opacity: .82; }
+.rocket-fin { position: absolute; left: 4px; width: 8px; height: 6px; background: var(--rocket-body); }
+.rocket-fin-top { top: -5px; clip-path: polygon(0 100%, 100% 100%, 34% 0); }
+.rocket-fin-bottom { bottom: -5px; clip-path: polygon(0 0, 100% 0, 34% 100%); }
+.rocket-flame { position: absolute; top: 4px; left: -8px; width: 9px; height: 6px; background: linear-gradient(90deg, transparent, var(--rocket-flame) 42%, var(--rocket-flame-tip)); border-radius: 70% 15% 15% 70%; clip-path: polygon(0 50%, 38% 3%, 100% 18%, 100% 82%, 38% 97%); animation: rocket-flame-flicker .14s ease-in-out infinite alternate; transform-origin: right center; }
+.cursor-rocket.is-active .rocket-shell { filter: drop-shadow(0 0 5px color-mix(in srgb, var(--rocket-flame) 82%, transparent)); transform: scale(1.1); }
 .cursor-rocket.is-exploding .rocket-shell { animation: rocket-explode .62s cubic-bezier(.2,.8,.2,1); }
 .cursor-rocket.is-exploding::after { position: absolute; top: 50%; left: 50%; width: 12px; height: 12px; border: 3px solid var(--rocket-flame); border-radius: 50%; content: ""; animation: rocket-shockwave .58s ease-out forwards; transform: translate(-50%, -50%); }
 @keyframes rocket-flame-flicker { from { transform: scaleX(.72); } to { transform: scaleX(1.15); } }
